@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="致郁帮欣：一份提前送达的生日惊喜 - 12.01 & 高考必胜" />
+    <title>郁帮欣 | 提前送达的生日惊喜</title>
+    
+    <!-- 引入 React 和 Tailwind -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind 配置 -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              rose: {
+                50: '#fff1f2',
+                100: '#ffe4e6',
+                200: '#fecdd3',
+                300: '#fda4af',
+                400: '#fb7185',
+                500: '#f43f5e',
+                600: '#e11d48',
+                700: '#be123c',
+                800: '#9f1239',
+                900: '#881337',
+              },
+              ice: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                200: '#bae6fd',
+                300: '#7dd3fc',
+              },
+              gold: {
+                100: '#f9f1d8',
+                200: '#f0e0aa',
+                300: '#e6cc76',
+                400: '#dcb848',
+                500: '#d4a528',
+              }
+            },
+            fontFamily: {
+              'serif': ['"Noto Serif SC"', 'serif'],
+              'sans': ['"Noto Sans SC"', 'sans-serif'],
+              'handwriting': ['"Ma Shan Zheng"', 'cursive'],
+              'cinzel': ['"Cinzel"', 'serif'],
+            },
+            animation: {
+              'float': 'float 8s ease-in-out infinite',
+              'float-delayed': 'float 8s ease-in-out infinite 4s',
+              'fade-in-up': 'fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+              'shine': 'shine 4s linear infinite',
+              'seal-appear': 'sealAppear 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+              'stamp-appear': 'stampAppear 0.5s ease-out forwards',
+              'twinkle': 'twinkle 3s ease-in-out infinite',
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'focus-in': 'focusIn 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
+              'blur-out': 'blurOut 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
+            },
+            keyframes: {
+              float: {
+                '0%, 100%': { transform: 'translateY(0)' },
+                '50%': { transform: 'translateY(-20px)' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(40px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              shine: {
+                '0%': { backgroundPosition: '200% center' },
+                '100%': { backgroundPosition: '-200% center' },
+              },
+              sealAppear: {
+                '0%': { transform: 'scale(2) rotate(20deg)', opacity: '0' },
+                '100%': { transform: 'scale(1) rotate(0deg)', opacity: '1' },
+              },
+              stampAppear: {
+                '0%': { transform: 'scale(1.5) rotate(-10deg)', opacity: '0' },
+                '100%': { transform: 'scale(1) rotate(-12deg)', opacity: '0.8' },
+              },
+              twinkle: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0.3' },
+              },
+              focusIn: {
+                '0%': { filter: 'blur(12px)', opacity: '0' },
+                '100%': { filter: 'blur(0px)', opacity: '1' },
+              },
+              blurOut: {
+                '0%': { filter: 'blur(0px)', opacity: '1' },
+                '100%': { filter: 'blur(12px)', opacity: '0' },
+              }
+            },
+          },
+        },
+      }
+    </script>
+
+    <style>
+      body {
+        font-family: 'Noto Sans SC', sans-serif;
+        overflow-x: hidden;
+        background-color: #fffafb;
+        margin: 0;
+        cursor: default;
+      }
+      
+      /* 噪点纹理 */
+      .noise-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.04;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      }
+
+      /* 磨砂冰晶玻璃 */
+      .glass-card {
+        background: rgba(255, 255, 255, 0.65);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 
+          0 4px 6px -1px rgba(0, 0, 0, 0.02),
+          0 20px 40px -10px rgba(225, 29, 72, 0.05),
+          inset 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+      
+      /* 纸张质感 */
+      .paper-texture {
+        background-color: #fffdf9;
+        background-image: url("data:image/svg+xml,%3Csvg width='4' height='4' viewBox='0 0 4 4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 3h1v1H1V3zm2-2h1v1H3V1z' fill='%23a8a29e' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+        box-shadow: 
+          0 1px 1px rgba(0,0,0,0.05), 
+          0 10px 0 -5px #fffdf9, 
+          0 10px 1px -4px rgba(0,0,0,0.05),
+          0 20px 0 -10px #fffdf9,
+          0 20px 1px -9px rgba(0,0,0,0.05);
+      }
+
+      /* 火漆印章 */
+      .wax-seal {
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(circle at 30% 30%, #e11d48, #9f1239);
+        border-radius: 50%;
+        box-shadow: 
+          inset 2px 2px 6px rgba(255,255,255,0.3),
+          inset -2px -2px 6px rgba(0,0,0,0.4),
+          3px 6px 12px rgba(0,0,0,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 4px solid #be123c;
+      }
+
+      /* 邮戳效果 */
+      .postmark {
+        border: 2px dashed #9f1239;
+        border-radius: 50%;
+        color: #9f1239;
+        font-family: 'Cinzel', serif;
+        text-align: center;
+        opacity: 0.8;
+        mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='white'/%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+      }
+      
+      /* 流光文字 */
+      .text-shine {
+        background: linear-gradient(to right, #9f1239 0%, #fb7185 20%, #f43f5e 40%, #fb7185 60%, #9f1239 100%);
+        background-size: 200% auto;
+        color: transparent;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shine 6s linear infinite;
+      }
+
+      ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- 组件：雪花特效 (Winter Symphony) ---
+        // 调整雪花更轻盈，像清晨的初雪
+        const Snowfall = () => {
+          const canvasRef = useRef(null);
+
+          useEffect(() => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            let particles = [];
+            let animationFrameId;
+
+            const resize = () => {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+            };
+
+            const createParticles = () => {
+              const particleCount = 70;
+              for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                  x: Math.random() * canvas.width,
+                  y: Math.random() * canvas.height,
+                  radius: Math.random() * 1.5 + 0.5,
+                  speed: Math.random() * 0.8 + 0.2, // Slower, more gentle
+                  wind: (Math.random() - 0.5) * 0.3,
+                  opacity: Math.random() * 0.4 + 0.1
+                });
+              }
+            };
+
+            const draw = () => {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              
+              particles.forEach(p => {
+                p.y += p.speed;
+                p.x += p.wind;
+
+                if (p.y > canvas.height) {
+                  p.y = 0;
+                  p.x = Math.random() * canvas.width;
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.fill();
+              });
+              animationFrameId = requestAnimationFrame(draw);
+            };
+
+            resize();
+            createParticles();
+            draw();
+            window.addEventListener('resize', resize);
+            return () => {
+              window.removeEventListener('resize', resize);
+              cancelAnimationFrame(animationFrameId);
+            };
+          }, []);
+
+          return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" />;
+        };
+
+        // --- 组件：星座连线 (The Archer) ---
+        const Constellation = () => {
+          const canvasRef = useRef(null);
+
+          useEffect(() => {
+            const canvas = canvasRef.current;
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            let stars = [];
+            let animationFrameId;
+
+            const resize = () => {
+              canvas.width = window.innerWidth;
+              canvas.height = window.innerHeight;
+            };
+
+            const createStars = () => {
+              const starCount = window.innerWidth < 768 ? 30 : 60;
+              for (let i = 0; i < starCount; i++) {
+                stars.push({
+                  x: Math.random() * canvas.width,
+                  y: Math.random() * canvas.height,
+                  size: Math.random() * 1.5 + 0.5,
+                  vx: (Math.random() - 0.5) * 0.15,
+                  vy: (Math.random() - 0.5) * 0.15,
+                });
+              }
+            };
+
+            const draw = () => {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+              
+              ctx.lineWidth = 0.5;
+              for (let i = 0; i < stars.length; i++) {
+                for (let j = i + 1; j < stars.length; j++) {
+                  const dx = stars[i].x - stars[j].x;
+                  const dy = stars[i].y - stars[j].y;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  
+                  if (dist < 100) {
+                    ctx.beginPath();
+                    ctx.moveTo(stars[i].x, stars[i].y);
+                    ctx.lineTo(stars[j].x, stars[j].y);
+                    ctx.strokeStyle = `rgba(226, 232, 240, ${1 - dist / 100})`;
+                    ctx.stroke();
+                  }
+                }
+              }
+
+              stars.forEach(star => {
+                star.x += star.vx;
+                star.y += star.vy;
+                if (star.x < 0 || star.x > canvas.width) star.vx *= -1;
+                if (star.y < 0 || star.y > canvas.height) star.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fill();
+              });
+
+              animationFrameId = requestAnimationFrame(draw);
+            };
+
+            resize();
+            createStars();
+            draw();
+            window.addEventListener('resize', resize);
+            return () => {
+              window.removeEventListener('resize', resize);
+              cancelAnimationFrame(animationFrameId);
+            };
+          }, []);
+
+          return <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-0 mix-blend-screen" />;
+        };
+
+        // --- 开场动画 (提前送达特别版 - 升级版) ---
+        const Intro = ({ onComplete }) => {
+          const [stage, setStage] = useState(0);
+
+          useEffect(() => {
+            const timers = [
+              setTimeout(() => setStage(1), 500),   // Special Delivery
+              setTimeout(() => setStage(2), 2500),  // Reason
+              setTimeout(() => setStage(3), 4800),  // Name (郁帮欣)
+              setTimeout(() => setStage(4), 7200),  // Happy Birthday (NEW STAGE)
+              setTimeout(onComplete, 10500)         // End
+            ];
+            return () => timers.forEach(clearTimeout);
+          }, [onComplete]);
+
+          return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#fffafb] overflow-hidden">
+              <div className="relative w-full h-full flex flex-col items-center justify-center">
+                
+                {/* Background Atmosphere */}
+                <div className={`absolute top-1/4 left-1/4 w-96 h-96 bg-rose-200/30 rounded-full mix-blend-multiply filter blur-3xl opacity-0 transition-opacity duration-1000 ${stage >= 0 ? 'opacity-100' : ''} animate-float`}></div>
+                <div className={`absolute bottom-1/4 right-1/4 w-96 h-96 bg-ice-200/30 rounded-full mix-blend-multiply filter blur-3xl opacity-0 transition-opacity duration-1000 delay-500 ${stage >= 0 ? 'opacity-100' : ''} animate-float`}></div>
+
+                <div className="text-center z-10 px-4 w-full max-w-4xl relative h-64 flex items-center justify-center">
+                  
+                  {/* Stage 1: Special Delivery */}
+                  <div className={`absolute transition-all duration-1000 ease-out transform ${stage === 1 ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-8 blur-sm'} ${stage > 1 ? '-translate-y-8' : ''}`}>
+                    <h2 className="font-cinzel text-xl text-rose-400 tracking-[0.5em] mb-4">SPECIAL DELIVERY</h2>
+                    <h1 className="serif text-4xl md:text-5xl text-rose-900 font-bold">提前抵达的惊喜</h1>
+                  </div>
+
+                  {/* Stage 2: Reason */}
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full transition-all duration-1000 ease-out transform ${stage === 2 ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-110 blur-sm'} ${stage > 2 ? 'scale-90 opacity-0' : ''}`}>
+                     <p className="text-rose-400 font-serif italic mb-4">Since you are fighting for your dream...</p>
+                     <h1 className="serif text-3xl md:text-5xl text-rose-900 font-medium tracking-wide">在 12.01 来临之前</h1>
+                  </div>
+
+                  {/* Stage 3: Name */}
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full transition-all duration-1000 ease-out transform ${stage === 3 ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-90 blur-sm'} ${stage > 3 ? 'opacity-0 scale-110 blur-sm' : ''}`}>
+                    <h1 className="serif text-6xl md:text-8xl text-rose-600 font-bold mb-4 drop-shadow-sm">郁帮欣</h1>
+                    <p className="text-gray-500 tracking-[0.3em] font-cinzel text-sm">EARLY BIRTHDAY WISH</p>
+                  </div>
+
+                  {/* Stage 4: Happy Birthday (NEW) */}
+                  <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full transition-all duration-1000 ease-out transform ${stage === 4 ? 'opacity-100 scale-100 blur-0' : 'opacity-0 scale-110 blur-md'}`}>
+                    <h1 className="handwriting text-7xl md:text-9xl text-rose-500 font-bold drop-shadow-lg animate-pulse-slow">生日快乐</h1>
+                    <div className="flex items-center justify-center gap-4 mt-6">
+                       <div className="h-[1px] w-12 bg-rose-300"></div>
+                       <p className="font-cinzel text-rose-400 tracking-[0.5em] text-lg font-bold">DEC 01</p>
+                       <div className="h-[1px] w-12 bg-rose-300"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        // --- 寄语卡片 ---
+        const Encouragement = () => {
+          const cards = [
+            {
+              title: "沉着",
+              subtitle: "CALM",
+              icon: "🌊",
+              content: "在分秒必争的备考时光里，愿你拥有一颗如静水深流般的心。乾坤未定，你我皆是黑马；执笔为剑，定能披荆斩棘。",
+              gradient: "from-rose-50 to-white"
+            },
+            {
+              title: "抢跑",
+              subtitle: "EARLY",
+              icon: "🎁",
+              content: "这是一份“抢跑”的祝福。虽然真正的生日还在日历的那一页，但快乐有权提前抵达。愿这份心意，成为你枯燥复习中的一颗糖。",
+              gradient: "from-gold-100/50 to-white"
+            },
+            {
+              title: "远方",
+              subtitle: "FUTURE",
+              icon: "✨",
+              content: "六月的风会吹散所有的疲惫。愿你在这个夏天，合上笔盖的那一刻，有着侠客收剑入鞘的骄傲。金榜题名，前程似锦。",
+              gradient: "from-rose-50 to-white"
+            },
+          ];
+
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
+              {cards.map((card, index) => (
+                <div 
+                  key={index}
+                  className="group relative glass-card p-8 rounded-2xl transition-all duration-700 hover:-translate-y-2 hover:shadow-2xl opacity-0 animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.2}s` }}
+                >
+                  <div className={`absolute inset-0 bg-gradient-to-br ${card.gradient} opacity-50 rounded-2xl`}></div>
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-6">
+                      <span className="text-xs font-bold tracking-[0.2em] text-rose-400 uppercase">{card.subtitle}</span>
+                      <span className="text-3xl filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:rotate-12">{card.icon}</span>
+                    </div>
+                    <h3 className="text-2xl serif text-rose-900 mb-4 font-bold flex items-center gap-2">
+                      {card.title}
+                      <span className="h-[1px] flex-grow bg-rose-200"></span>
+                    </h3>
+                    <p className="text-gray-600 leading-relaxed font-light text-justify text-sm md:text-base">
+                      {card.content}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        };
+
+        // --- 手写信 (提前送达特别版) ---
+        const Letter = () => {
+          const [isVisible, setIsVisible] = useState(false);
+          const letterRef = useRef(null);
+
+          useEffect(() => {
+            const observer = new IntersectionObserver(
+              ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
+              { threshold: 0.1 }
+            );
+            if (letterRef.current) observer.observe(letterRef.current);
+            return () => observer.disconnect();
+          }, []);
+
+          return (
+            <div ref={letterRef} className={`w-full max-w-2xl mx-auto px-4 py-20 transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
+              <div className="relative paper-texture p-6 md:p-12 lg:p-16 transform transition-transform duration-500 md:rotate-1 hover:rotate-0">
+                
+                {/* 邮戳 - 提前送达 */}
+                <div className="absolute top-10 left-10 w-32 h-32 opacity-0 animate-stamp-appear hidden md:flex items-center justify-center postmark transform -rotate-12 z-20" style={{ animationDelay: '0.8s' }}>
+                   <div className="flex flex-col items-center leading-tight">
+                     <span className="text-[10px] tracking-widest">PRIORITY</span>
+                     <span className="text-lg font-bold">EARLY</span>
+                     <span className="text-xs border-t border-b border-rose-800/30 py-1 my-1">DELIVERY</span>
+                     <span className="text-[10px]">NOV ➔ DEC 01</span>
+                   </div>
+                </div>
+
+                <div className="absolute top-6 right-6 md:top-10 md:right-10 z-20 animate-seal-appear wax-seal">
+                  <span className="text-rose-100 font-handwriting text-4xl mt-1 drop-shadow-md">欣</span>
+                </div>
+
+                <div className="relative z-10 border border-rose-900/10 p-6 md:p-10 h-full">
+                  <div className="flex justify-between items-end mb-10 border-b border-rose-100 pb-4">
+                    <h2 className="serif text-xl md:text-2xl text-rose-900 font-bold tracking-widest pl-0 md:pl-24">
+                      致 追光的女孩
+                    </h2>
+                  </div>
+
+                  <div className="serif text-gray-700 text-base md:text-lg leading-[2.2] space-y-6 text-justify">
+                    <p><span className="font-bold text-rose-900">亲爱的郁帮欣同学：</span></p>
+                    <p>见字如面。</p>
+                    <p>这封信，比日历上那个特殊的日子（12.01）稍微早到了一点点。我知道，真正的生日那天，你会在学校里，正与书山题海并肩作战。信号或许会被屏蔽，但祝福永远在线。</p>
+                    <p>所以，我把这份心意打包，让它提前翻山越岭，抢先抵达。</p>
+                    <p>备考的日子注定是孤独的，就像在黑屋子里洗衣服，虽然看不见，但你一遍又一遍地搓洗，终会洗去尘埃，迎来光亮。你的名字本就藏着力量：</p>
+                    <div className="pl-4 border-l-2 border-rose-200 space-y-2 py-2 my-2 bg-white/40 italic">
+                      <p><span className="text-rose-600 font-medium">“郁”</span> 是葱茏蓬勃，风雨中也要倔强生长；</p>
+                      <p><span className="text-rose-600 font-medium">“帮”</span> 是温暖有力，既渡他人亦渡自己；</p>
+                      <p><span className="text-rose-600 font-medium">“欣”</span> 是欣欣向荣，永远向着阳光抬头。</p>
+                    </div>
+                    <p>愿你合上笔盖的刹那，有着侠客收剑入鞘的骄傲。生日快乐，我的高考战士！</p>
+                  </div>
+
+                  <div className="mt-16 flex flex-col items-end">
+                    <div className="transform -rotate-2">
+                      <p className="handwriting text-3xl md:text-4xl text-rose-600 mb-2">生日快乐，高考必胜！</p>
+                      <div className="w-full h-1 bg-rose-200/50 rounded-full"></div>
+                    </div>
+                    <p className="mt-4 text-xs text-rose-400 uppercase tracking-widest">Sent with Love · Early Bird</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        // --- 主程序 ---
+        const App = () => {
+          const [showMain, setShowMain] = useState(false);
+
+          return (
+            <div className="min-h-screen w-full relative">
+              {!showMain ? (
+                <Intro onComplete={() => setShowMain(true)} />
+              ) : (
+                <>
+                  <main className="relative z-10 w-full flex flex-col items-center">
+                    
+                    {/* 1. Hero 区域 - 提前送达主题 */}
+                    <header className="w-full min-h-screen flex flex-col relative bg-[#fffafb] overflow-hidden">
+                      <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-rose-200/30 rounded-full blur-[100px] animate-float"></div>
+                        <div className="absolute bottom-[10%] left-[10%] w-[300px] h-[300px] bg-gold-200/20 rounded-full blur-[80px] animate-float-delayed"></div>
+                      </div>
+
+                      <div className="flex-1 flex flex-col justify-center items-center text-center px-4 relative z-10">
+                        <div className="mb-6 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+                          <span className="inline-block px-4 py-1.5 rounded-full border border-rose-200/60 bg-white/40 backdrop-blur-md text-rose-800/70 text-xs tracking-[0.3em] font-cinzel font-bold shadow-sm">
+                            SPECIAL DELIVERY · FOR DEC 1ST
+                          </span>
+                        </div>
+                        
+                        <div className="relative py-4 opacity-0 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+                          <h2 className="text-rose-400 font-serif italic text-xl md:text-3xl mb-2">Advance Wishes for</h2>
+                          <h1 className="serif text-6xl md:text-8xl lg:text-9xl font-bold text-shine drop-shadow-sm tracking-tight leading-tight py-2">
+                            郁帮欣
+                          </h1>
+                        </div>
+
+                        <p className="text-gray-600 text-lg md:text-xl leading-relaxed font-light serif max-w-lg mx-auto opacity-0 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                          因为你正在为梦想全力以赴<br/>
+                          所以祝福也要<span className="text-rose-600 font-medium border-b border-rose-200 mx-1">争分夺秒</span><br/>
+                          提前抵达你的身边
+                        </p>
+                      </div>
+
+                      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce text-rose-300 opacity-0 animate-fade-in-up" style={{ animationDelay: '1s' }}>
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                      </div>
+                    </header>
+
+                    {/* 2. 冬日序曲 Section */}
+                    <section className="w-full min-h-[80vh] relative flex items-center justify-center bg-gradient-to-b from-[#fffafb] to-ice-50 overflow-hidden py-20">
+                      <Snowfall />
+                      <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-12">
+                         <div className="md:w-1/2 text-center md:text-right order-2 md:order-1 opacity-0 animate-fade-in-up">
+                            <h2 className="text-4xl md:text-5xl serif text-slate-800 mb-6 font-bold">冬日序曲</h2>
+                            <h3 className="text-sm font-cinzel text-slate-400 tracking-[0.4em] mb-8">WINTER SYMPHONY</h3>
+                            <p className="text-slate-600 serif leading-loose text-lg text-justify">
+                              12月1日，初冬的序曲。虽然现在还未到那一天，但冬日的氛围已至。你出生在这一年的尾声，仿佛是为了压轴登场。此刻的静默与沉潜，都是为了六月那一刻的惊雷。
+                            </p>
+                         </div>
+                         <div className="md:w-1/2 order-1 md:order-2 flex justify-center opacity-0 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                            <div className="relative w-64 h-80 bg-white p-2 shadow-2xl rotate-3 transform transition-transform hover:rotate-0">
+                               <div className="w-full h-full bg-slate-200 flex items-center justify-center overflow-hidden">
+                                  <div className="absolute inset-0 bg-gradient-to-tr from-ice-100 to-rose-50 opacity-50"></div>
+                                  <span className="text-6xl text-white/80 font-serif">❄️</span>
+                               </div>
+                               <div className="absolute -bottom-10 -right-10 text-9xl text-ice-200/20 font-serif font-bold pointer-events-none">12</div>
+                            </div>
+                         </div>
+                      </div>
+                    </section>
+
+                    {/* 3. 射手座的箭 Section */}
+                    <section className="w-full min-h-[80vh] relative flex items-center justify-center bg-[#0f172a] text-white overflow-hidden py-20">
+                      <Constellation />
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent pointer-events-none"></div>
+                      
+                      <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center gap-12">
+                         <div className="md:w-1/2 flex justify-center opacity-0 animate-fade-in-up">
+                            <div className="relative w-64 h-64 border border-white/20 rounded-full flex items-center justify-center">
+                               <div className="absolute inset-0 border border-white/10 rounded-full animate-ping opacity-20"></div>
+                               <span className="text-8xl transform -rotate-45">🏹</span>
+                            </div>
+                         </div>
+                         <div className="md:w-1/2 text-center md:text-left opacity-0 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+                            <h2 className="text-4xl md:text-5xl serif text-white mb-6 font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-200 to-amber-200">射手座的箭</h2>
+                            <h3 className="text-sm font-cinzel text-white/40 tracking-[0.4em] mb-8">THE ARCHER</h3>
+                            <p className="text-gray-300 serif leading-loose text-lg text-justify">
+                              射手座的箭，永远指向远方。拥有火象星座的热烈与自由，你天生属于广阔的天空。高考不过是你箭矢飞过的一道风景。拉满弓，屏住气，你瞄准的，是那个无限可能的未来。
+                            </p>
+                         </div>
+                      </div>
+                    </section>
+
+                    {/* 4. 寄语 & 信件区域 */}
+                    <div className="bg-gradient-to-b from-[#fffafb] via-rose-50/30 to-white py-20 w-full">
+                      <div className="flex items-center justify-center gap-4 mb-20 opacity-80">
+                         <div className="h-[1px] w-12 bg-rose-200"></div>
+                         <h2 className="text-2xl serif text-rose-900 font-medium">时光寄语</h2>
+                         <div className="h-[1px] w-12 bg-rose-200"></div>
+                      </div>
+                      <Encouragement />
+                      <Letter />
+                    </div>
+
+                    <footer className="w-full py-12 text-center text-rose-900/40 border-t border-rose-100/50 bg-white/40 backdrop-blur-sm">
+                      <p className="serif text-sm tracking-widest mb-2">愿六月风起 · 传来佳音</p>
+                      <p className="text-xs font-light">© 2024 For Yu Bangxin · 12.01</p>
+                    </footer>
+                  </main>
+                </>
+              )}
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
